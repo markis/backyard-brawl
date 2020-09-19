@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python -m brawl
+docker run -v data:/brawl/data brawl
 
 git add .
 git commit -m 'Update Score'
