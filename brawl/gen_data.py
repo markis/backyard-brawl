@@ -52,8 +52,7 @@ def generate_data_sheets(league_id=516427156663472128):
         for owner_id, row in running_scores_by_owner.items():
             csvwriter.writerow([user_map[owner_id]] + [i for i in row[3:]])
 
-    pprint(weekly_scores_by_weekandowner)
-    pprint(running_scores_by_owner)
+    print("Done")
 
 
 def _sort_func(score):
