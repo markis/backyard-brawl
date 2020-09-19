@@ -49,6 +49,7 @@ def generate_data_sheets(league_id=516427156663472128):
                 "total against",
             ]
         )
+        rows = [(owner_id, row) for owner_id, row in running_scores_by_owner.items()]
         for owner_id, row in running_scores_by_owner.items():
             csvwriter.writerow([user_map[owner_id]] + [i for i in row[3:]])
 
