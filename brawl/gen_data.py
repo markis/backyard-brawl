@@ -91,12 +91,12 @@ def calculate_team_totals(
             running_against += score_against
 
         row = (
-            score,
-            score_for,
-            score_against,
-            running_score,
-            running_for,
-            running_against,
+            round(score, 2),
+            round(score_for, 2),
+            round(score_against, 2),
+            round(running_score, 2),
+            round(running_for, 2),
+            round(running_against, 2),
         )
 
         weekly_scores_by_weekandowner[week][owner_id] = row
