@@ -50,6 +50,7 @@ def generate_data_sheets(league_id=516427156663472128):
             ]
         )
         rows = [(owner_id, row) for owner_id, row in running_scores_by_owner.items()]
+        rows.sort(key=lambda owner_id, row: row[-2])
         for owner_id, row in running_scores_by_owner.items():
             csvwriter.writerow([user_map[owner_id]] + [i for i in row[3:]])
 
