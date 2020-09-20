@@ -1,6 +1,7 @@
 #!/bin/bash
 
-docker run -v data:/brawl/data brawl
+source /home/markis/venv/backyard-brawl/bin/activate
+python -m brawl
 
 git add .
 git commit -m 'Update Score'
