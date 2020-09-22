@@ -1,6 +1,6 @@
 import csv
-from pprint import pprint
 from collections import defaultdict
+from operator import itemgetter
 from sleeper_wrapper import League
 
 
@@ -50,15 +50,11 @@ def generate_data_sheets(league_id=516427156663472128):
             ]
         )
         rows = [(owner_id, row) for owner_id, row in running_scores_by_owner.items()]
-        rows.sort(key=lambda row: row[1][-2], reverse=True)
+        rows.sort(key=lambda row: (row[1][4], row[1][3]), reverse=True)
         for owner_id, row in rows:
             csvwriter.writerow([user_map[owner_id]] + [i for i in row[3:]])
 
     print("Done")
-
-
-def _sort_func(score):
-    return score[0] if score and score[0] else 0
 
 
 def calculate_team_totals(
@@ -67,7 +63,7 @@ def calculate_team_totals(
     scores = []
     if scores_by_owner:
         scores = [(score, player_id) for player_id, score in scores_by_owner.items()]
-        scores.sort(key=_sort_func, reverse=True)
+        scores.sort(key=itemgetter(0), reverse=True)
 
     team_count = len(scores) - 1
     for x in range(team_count + 1):
