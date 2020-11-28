@@ -8,4 +8,4 @@ RUN pip install .
 
 ADD . /brawl
 
-CMD ["python", "-m", "brawl"]
+CMD ["/bin/sh", "-c", "/brawl/job-docker.sh"]

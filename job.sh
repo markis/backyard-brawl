@@ -1,6 +1,9 @@
 #!/bin/bash
 
-source /home/markis/venv/backyard-brawl/bin/activate
+if [ -d $HOME/venv/backyard-brawl/bin/ ]; then
+  source $HOME/venv/backyard-brawl/bin/activate
+fi
+
 python -m brawl
 
 git add data/
