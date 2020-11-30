@@ -1,20 +1,31 @@
 import csv
+import typing
 from collections import defaultdict
+from collections import namedtuple
 from operator import itemgetter
+
 from sleeper_wrapper import League
 
+Row = typing.Any
+OwnerId = typing.NewType("OwnerId", str)
+Score = typing.NewType("Score", float)
+Week = typing.NewType("Week", int)
 
-def generate_data_sheets(league_id=516427156663472128):
+RowCollection = typing.Dict[OwnerId, Row]
+
+
+def generate_data_sheets(league_id: typing.Optional[str] = 516427156663472128):
     league = League(league_id)
-    rosters = league.get_rosters()
     users = league.get_users()
 
     user_map = {user["user_id"]: user["display_name"] for user in users}
 
-    running_scores_by_owner = {}
-    weekly_scores_by_weekandowner = defaultdict(dict)
+    running_scores_by_owner: RowCollection = {}
+    weekly_scores_by_weekandowner: typing.DefaultDict[
+        Week, RowCollection
+    ] = defaultdict(dict)
     for week in range(1, 18):
-        scores_by_owner = get_scores_by_owner(league, rosters, week)
+        scores_by_owner = get_scores_by_owner(league, week)
         calculate_team_totals(
             week,
             scores_by_owner,
@@ -58,7 +69,10 @@ def generate_data_sheets(league_id=516427156663472128):
 
 
 def calculate_team_totals(
-    week, scores_by_owner, weekly_scores_by_weekandowner, running_scores_by_owner
+    week,
+    scores_by_owner: typing.Dict[OwnerId, Score],
+    weekly_scores_by_weekandowner: typing.DefaultDict[Week, RowCollection],
+    running_scores_by_owner: RowCollection,
 ):
     scores = []
     if scores_by_owner:
@@ -100,16 +114,17 @@ def calculate_team_totals(
         running_scores_by_owner[owner_id] = row
 
 
-def get_scores_by_owner(league: League, rosters, week):
+def get_scores_by_owner(league: League, week: int) -> typing.Dict[OwnerId, Score]:
     matchups = league.get_matchups(week)
+    rosters = league.get_rosters()
     roster_id_dict = league.map_rosterid_to_ownerid(rosters)
 
-    scores = {}
+    scores: typing.Dict[OwnerId, Score] = {}
     total_score = 0
     for team in matchups:
         current_roster_id = team["roster_id"]
-        owner_id = roster_id_dict[current_roster_id]
-        score = team["points"]
+        owner_id = OwnerId(roster_id_dict[current_roster_id])
+        score = Score(float(team["points"]))
         if score:
             total_score += score
         scores[owner_id] = score
