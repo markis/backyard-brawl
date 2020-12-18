@@ -9,6 +9,6 @@ cp /mnt/config/.gitconfig $HOME/.gitconfig
 
 while true
 do
-  source /brawl/job.sh
+  source /app/job.sh
   sleep 300
 done
