@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p /app/data
 mkdir -p $HOME/.ssh
 
 cp /mnt/ssh/* $HOME/.ssh
